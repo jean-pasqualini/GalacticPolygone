@@ -1,0 +1,14 @@
+{
+  "name" : "GalacticPolygone",
+  "version" : "0.1.0",
+  "main" : "bower.json",
+  "ignore" : [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies" : {
+       "matter-js" : "0.8.0-alpha"
+  }
+
+}
