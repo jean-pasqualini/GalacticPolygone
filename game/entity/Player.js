@@ -46,7 +46,10 @@ function Player() {
                     frictionAir: 0.5,
                     render: {
                         fillStyle: '#abcdef',
-                        lineWidth: 3
+                        lineWidth: 3,
+                        sprite: {
+                            texture: "assets/sprite/monster.png"
+                        }
                     }
                 });
 

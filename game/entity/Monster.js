@@ -11,11 +11,17 @@
 			this.name = "Monster";
 			var posx=60+Math.random()*190,posy=-80;
 
-			var tri = Matter.Bodies.polygon(posx,posy,3,10+Math.random()*10,{density: 0.01});
+            var render = {
+                    sprite: {
+                        texture: "assets/sprite/asteroid.png"
+                    }
+            };
+
+			var tri = Matter.Bodies.polygon(posx,posy,3,10+Math.random()*10,{density: 0.01, render: render});
 			Matter.Body.rotate(tri,3.14/360*2*30);
 
 			if(Math.random()*10 > 5){
-				tri = Matter.Bodies.rectangle(posx,posy, 10+Math.random()*20,10+Math.random()*20,{ density: 0.01});
+				tri = Matter.Bodies.rectangle(posx,posy, 10+Math.random()*20,10+Math.random()*20,{ density: 0.01, render: render});
 				Matter.Body.rotate(tri,3.14/360*2*45*Math.random()*360);
 			}
 

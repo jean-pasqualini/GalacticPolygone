@@ -45,7 +45,7 @@ define([], function() {
 
             var enemys = _.filter(entitys, function(entity)
             {
-                return entity instanceof Monster && entity.getPosition().y > 0 && entity.getPosition().x > 0;
+                return entity instanceof Monster && entity.getPosition().y > 0 && entity.getPosition().y < 200 && entity.getPosition().x > 0;
             });
 
             if(_.isEmpty(enemys))
@@ -54,39 +54,33 @@ define([], function() {
                 return;
             }
 
-            this.defenders = entitys;
+            this.defenders = _.filter(entitys, function(entity) { return entity instanceof Player; });
+
+            if(_.isEmpty(this.defenders)) return;
 
             var defender = this.getDefender();
 
-            var distanceEnemys = new Array();
-
-            _.sortBy(enemys, function(enemy)
-            {
-                return (enemy.getPosition().y - defender.getPosition().y);
-            });
-
-            /**
-            _.each(enemys, function(enemy)
-            {
-                console.log("@@ " + enemy.getPosition().y + " : " + defender.getPosition().y);
-            });
-             */
-
-            var myEnemy = _.first(enemys);
+            var myEnemy = Path2d.getLessFar(defender, enemys);
 
             var enemyPosition = myEnemy.getPosition();
             var defenderPosition = defender.getPosition();
 
+            var path = new Path2d([enemyPosition]);
+
+            path.update(defender.getBody(), 15);
+
+            /**
             var direction = {
                 horizontal: (enemyPosition.x == defenderPosition.x) ? 0 : (enemyPosition.x > defenderPosition.x ) ? 1 : -1,
                 vertical: (defenderPosition.y < 450) ? 0 : -1
             };
+            */
 
 //            console.log(direction);
 
-            defender.move(direction, 5);
+           // defender.move(direction, 5);
 
-            defender.fired();
+            if(typeof defender.fired != "undefined") defender.fired();
 
             this.logger.log("DEBUG", "[IA] " + _.size(enemys) + " enemys left");
 
