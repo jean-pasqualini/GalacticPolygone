@@ -12,7 +12,17 @@ var Menu = (function()
     _.extend(classFunction.prototype, Room.prototype, {
         init: function()
         {
-            this.add(new Button());
+            this.add(new Button({
+                text: "un"
+            }));
+
+            this.add(new Button({
+                text: "deux"
+            }));
+
+            this.add(new Button({
+                text: "trois"
+            }));
         },
         render: function()
         {

@@ -10,6 +10,9 @@ function Entity(){
 		Entity.initialized = true;
 	}
     this.css = false;
+
+    this.parent = null;
+    this.childrens = new Array();
 }
 
 /**
@@ -18,6 +21,33 @@ function Entity(){
  */
 Entity.prototype.setName = function(theEntityName){
     this.name = theEntityName;
+};
+
+Entity.prototype.getParent = function()
+{
+    return this.parent;
+};
+
+Entity.prototype.setParent = function(parent)
+{
+     this.parent = parent;
+};
+
+Entity.prototype.addChildren = function(children, name)
+{
+    children.setParent(this);
+
+    this.childrens.push(children);
+};
+
+Entity.prototype.removeChildren = function(name)
+{
+    // Not implemented
+};
+
+Entity.prototype.getChildrens = function()
+{
+   return this.childrens;
 };
 
 /**
@@ -122,6 +152,12 @@ Entity.prototype.preInit = function(room){
  * Méthode gèrer par le moteur de jeux. "Classe Room"
  */
 Entity.prototype.preRender = function(room){
+
+    _.each(this.getChildrens(), function(children)
+    {
+        children.preRender(room);
+    });
+
     //Ajout de code ici
 
     this.render(room);

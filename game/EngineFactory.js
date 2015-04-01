@@ -27,7 +27,8 @@ var EngineFactory = (function()
                             options:
                             {
                                 showDebug: true,
-                                wireframes: false
+                                wireframes: false,
+                                background: "url('assets/sprite/sky.jpg')"
                             }
                         }
                     });

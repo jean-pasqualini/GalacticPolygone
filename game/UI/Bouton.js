@@ -1,7 +1,17 @@
 var Button = (function()
 {
-    var classFunction = function() {
+    var classFunction = function(options) {
         Entity.call(this);
+
+        if(typeof options == "undefined") options = {};
+
+        var finalOptions = {
+            text: ""
+        };
+
+        _.extend(finalOptions, options);
+
+        this.text = finalOptions.text;
     };
 
     _.extend(classFunction.prototype, Entity.prototype, {
@@ -33,7 +43,7 @@ var Button = (function()
         {
             console.log("bouton");
             canvasContext2d.fillStyle = 'rgb(255,0,0)';
-            canvasContext2d.fillText("truc",100,100);
+            canvasContext2d.fillText(this.text,100,100);
         }
     });
 
