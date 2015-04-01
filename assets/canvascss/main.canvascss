@@ -1,0 +1,18 @@
+CanvasCss = {
+    "Player" :
+    {
+        "border": "red",
+        "background-color": "green",
+        "background-image": "assets/sprite/monster.png",
+        "border-width" : "10"
+    },
+    "Monster" :
+    {
+        "background-color": "blue",
+        "background-image": "assets/sprite/asteroid.png",
+    },
+    "Button" :
+    {
+        "background-color": "yellow"
+    }
+};

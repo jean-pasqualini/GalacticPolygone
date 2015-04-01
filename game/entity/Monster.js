@@ -17,11 +17,11 @@
                     }
             };
 
-			var tri = Matter.Bodies.polygon(posx,posy,3,10+Math.random()*10,{density: 0.01, render: render});
+			var tri = Matter.Bodies.polygon(posx,posy,3,10+Math.random()*10,{density: 0.01});
 			Matter.Body.rotate(tri,3.14/360*2*30);
 
 			if(Math.random()*10 > 5){
-				tri = Matter.Bodies.rectangle(posx,posy, 10+Math.random()*20,10+Math.random()*20,{ density: 0.01, render: render});
+				tri = Matter.Bodies.rectangle(posx,posy, 10+Math.random()*20,10+Math.random()*20,{ density: 0.01});
 				Matter.Body.rotate(tri,3.14/360*2*45*Math.random()*360);
 			}
 

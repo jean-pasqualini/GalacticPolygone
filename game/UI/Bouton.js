@@ -8,7 +8,7 @@ var Button = (function()
         init: function()
         {
             this.id = 5;
-            this.name = "ddd";
+            this.name = "Button";
 
             var x = 0;
             var y = 15;

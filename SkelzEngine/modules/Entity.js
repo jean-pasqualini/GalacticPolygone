@@ -32,7 +32,18 @@ Entity.prototype.getName = function(){
  * Détruie et décharge de la mémoire l'ancien Body avant de configurer le nouveau.
  * @param Body
  */
-Entity.prototype.setBody = function(body){
+Entity.prototype.setBody = function(body, options){
+
+    if(typeof options == "undefined") options = { css: false };
+
+    if(options.css)
+    {
+        require(["game/CssMatcher/Stylesheet"], _.bind(function(Stylesheet)
+        {
+            _.extend(body.render, Stylesheet.getRulesForObject(this));
+        }, this));
+    }
+
     if(this.priv_body !== undefined){
         Matter.Composite.remove(SkelzEngine.engine.world, this.priv_body, true);
     }

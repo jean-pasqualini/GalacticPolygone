@@ -15,7 +15,11 @@ function Room1(){
 _.extend(Room1.prototype, Room.prototype, {
     init : function()
     {
-        this.add(new Player());
+        require(["game/entity/Player"], _.bind(function(Player)
+        {
+            this.add(new Player());
+        }, this));
+
         this.add(new Monster());
         this.gameHub = new GameHud();
         this.addEventListener("dead", _.bind(this.onDeadPlayer, this));

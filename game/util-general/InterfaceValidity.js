@@ -10,12 +10,15 @@ var InterfaceValidity = {
 
        if(validated)
        {
-           if(typeof  instance.__interfaceValidated == "undefined")
+           if(typeof instance.__interfaceValidated == "undefined")
            {
                instance.__interfaceValidated = new Array();
            }
 
-           instance.__interfaceValidated.push(Interface);
+           if(_.indexOf(instance.__interfaceValidated, Interface) != -1)
+           {
+               instance.__interfaceValidated.push(Interface);
+           }
        }
 
        return validated;

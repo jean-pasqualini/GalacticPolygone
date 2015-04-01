@@ -45,6 +45,8 @@
         baseUrl : "./"
     });
 </script>
+<script type="text/javascript" src="assets/canvascss/main.canvascss"></script>
+
 <!-- Include the SkelzEngine -->
 <script src="SkelzEngine/libs/underscore-min.js"></script>
 <script src="game/IA/Event.js"></script>
@@ -57,7 +59,6 @@
 <script src="SkelzEngine/libs/matter-0.8.0.min.js"></script>
 <script src="SkelzEngine/modules/Room.js"></script>
 <script src="SkelzEngine/modules/Entity.js"></script>
-
 <script src="https://code.createjs.com/soundjs-0.6.0.min.js"></script>
 <!--
 <script src="http://cdnjs.cloudflare.com/ajax/libs/pixi.js/2.2.8/pixi.js"></script>
@@ -73,6 +74,7 @@
 <script src="game/util-general/GameHud.js"></script>
 <script src="game/util-general/InterfaceValidity.js"></script>
 <script src="game/util-general/Path2d.js"></script>
+<script src="game/util-general/StyleMatcher.js"></script>
 <script src="game/SoundManager/ZeroEngineSoundManagerInterface.js"></script>
 <script>
 
@@ -195,8 +197,10 @@ _.each(_optionsKeyValue, function(keyvalue)
    optionsUrl[keyvalue[0]] = keyvalue[1];
 });
 
-var start = function(NullController)
+var start = function(NullController, Stylesheet)
 {
+
+    Stylesheet.addFile("custom");
 
     SkelzEngine.init(function(){
 
@@ -216,7 +220,7 @@ var start = function(NullController)
     }, (typeof optionsUrl["engine"] == "undefined") ? null : EngineFactory.factory(optionsUrl["engine"]));
 };
 
-require(["game/Controller/NullController"], start);
+require(["game/Controller/NullController", "game/CssMatcher/Stylesheet"], start);
 
 
 </script>
