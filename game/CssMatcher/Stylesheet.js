@@ -1,10 +1,34 @@
-define(["game/CssMatcher/ObjectCssInterface", "game/CssMatcher/CssParser"], function(ObjectCssInterface, CssParser)
+define([
+    "game/CssMatcher/ObjectCssInterface",
+    "game/CssMatcher/CssParser",
+    "game/CacheManager/CacheManagerInterface"
+], function(
+    ObjectCssInterface,
+    CssParser,
+    CacheManagerInterface
+)
 {
-   var StyleSheet = {
+   var Stylesheet = {
         theme: "Default",
         definitionsCss: {},
         folder: "theme/",
        __stateCss : {},
+       cacheStorage: null,
+       setCacheStorage: function(cacheStorage)
+       {
+           var validate = InterfaceValidity.validatePrototype(Object.getPrototypeOf(cacheStorage), CacheManagerInterface);
+
+           if(validate !== true)
+           {
+               InterfaceValidity.throwError(validate);
+           }
+
+           Stylesheet.cacheStorage = cacheStorage;
+       },
+       getCacheStorage: function()
+       {
+           return Stylesheet.cacheStorage;
+       },
         setTheme: function(theme)
         {
 
@@ -19,7 +43,7 @@ define(["game/CssMatcher/ObjectCssInterface", "game/CssMatcher/CssParser"], func
         },
         addResource: function(resource, type, name)
         {
-            StyleSheet.definitionsCss[name] = StyleSheet.getParser().parse(resource, type);
+            Stylesheet.definitionsCss[name] = Stylesheet.getParser().parse(resource, type);
         },
         removeFile: function(file)
         {
@@ -35,6 +59,8 @@ define(["game/CssMatcher/ObjectCssInterface", "game/CssMatcher/CssParser"], func
 
             var matched = {};
 
+            var cacheStorage = Stylesheet.getCacheStorage();
+
             var entityRepresent = (typeof entity.objectCss != "undefined") ? entity.objectCss : entity;
 
             var identifier = entityRepresent.getIdentifier();
@@ -46,12 +72,12 @@ define(["game/CssMatcher/ObjectCssInterface", "game/CssMatcher/CssParser"], func
                 InterfaceValidity.throwError(validatedRepresent);
             }
 
-            if(typeof StyleSheet.__stateCss[identifier] != "undefined")
+            if(cacheStorage.has(identifier))
             {
-                return StyleSheet.__stateCss[identifier];
+                return cacheStorage.get(identifier, "object");
             }
 
-            _.each(StyleSheet.definitionsCss, function(resource)
+            _.each(Stylesheet.definitionsCss, function(resource)
             {
                 _.each(resource, function(cssObject, selector)
                 {
@@ -78,11 +104,11 @@ define(["game/CssMatcher/ObjectCssInterface", "game/CssMatcher/CssParser"], func
             if(typeof matched["border-width"] != "undefined") render.lineWidth = { texture : matched["border-width"] };
             if(typeof matched["background-sound"] != "undefined") render.sound = matched["background-sound"];
 
-            StyleSheet.__stateCss[identifier] = render;
+            cacheStorage.set(identifier, render, "object");
 
             return render;
         }
    };
 
-    return StyleSheet;
+    return Stylesheet;
 });

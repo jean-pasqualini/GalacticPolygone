@@ -5,6 +5,10 @@ define([], function()
      "set",
      "has",
      "remove",
-     "isSupport"
+     "isSupport",
+     "isSupportObject",
+     "isPersistent",
+     "store",
+     "restore"
    ];
 });

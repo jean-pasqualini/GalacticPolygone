@@ -193,7 +193,7 @@ canvasContext2d.mozImageSmoothingEnabled = false;
 
 var optionsUrl =
 {
-    debug: 0
+    debug: 1
 };
 
 var _optionsKeyValue = window.location.hash.replace("#", "").split("&");
@@ -238,7 +238,7 @@ var start = function(NullController, Stylesheet, CacheStorage)
 require([
     "game/Controller/NullController",
     "game/CssMatcher/Stylesheet",
-    (typeof localStorage != "undefined") ? "game/CacheManager/LocalStorageCacheManager" : "game/CacheManager/MemoryCacheManager"
+    "game/CacheManager/MemoryStorageCacheManager"
 ], start);
 
 

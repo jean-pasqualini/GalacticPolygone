@@ -1,20 +1,52 @@
-define([], function()
+define(["game/CacheManager/MemoryStorageCacheManager"], function(MemoryStorage)
 {
    var ClassFunction = function() {
        if(typeof localStorage == "undefined")
        {
            throw "local storage required";
        }
+
+       this.memoryStorage = new MemoryStorage();
    };
 
-    _.extend(ClassFunction, {
-        set: function(key, value)
+    _.extend(ClassFunction.prototype, {
+        normalizeData: function(data, type)
         {
-            localStorage.setItem(key, value);
+            switch(type)
+            {
+                case "object":
+                    return JSON.stringify(data);
+                break;
+
+                default:
+                    return data;
+                break;
+            }
         },
-        get: function(key)
+        denormalizeData: function(data, type)
         {
-            localStorage.getItem(key, value);
+            switch(type)
+            {
+                case "object":
+                    return JSON.parse(data);
+                break;
+
+                default:
+                    return data;
+                break;
+            }
+        },
+        set: function(key, value, type)
+        {
+            if(typeof type == "undefined") type = "auto";
+
+            localStorage.setItem(key, this.normalizeData(value, type));
+        },
+        get: function(key, type)
+        {
+            if(typeof type == "undefined") type = "auto";
+
+            return this.denormalizeData(localStorage.getItem(key, value), type);
         },
         has: function(key)
         {
@@ -26,7 +58,25 @@ define([], function()
         },
         isSupport: function()
         {
+            return true;
+        },
+        isSupportObject: function()
+        {
             return false;
+        },
+        isPersistent: function()
+        {
+            return true;
+        },
+        store: function()
+        {
+            // Not supported
+        },
+        restore: function()
+        {
+            // Not supported
         }
     });
+
+    return ClassFunction;
 });
