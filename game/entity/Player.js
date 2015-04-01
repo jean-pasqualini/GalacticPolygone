@@ -1,7 +1,10 @@
 define("game/entity/Player", ["game/CssMatcher/ObjectCss"], function(ObjectCss)
 {
+    'use strict';
+
     var Player = function Player() {
         Entity.call(this);
+        require("game/CssMatcher/ObjectCss").call(this);
         this.destroyCount = 0;
         var parent = Entity.prototype;
         var me = this;
@@ -30,6 +33,7 @@ define("game/entity/Player", ["game/CssMatcher/ObjectCss"], function(ObjectCss)
                 this.addEventListener("onFire", _.bind(this.onFire, this))
                 //this.addEventListener("onDestroy", _.bind(this.onDestroy, this));
                 this.id = Player.block;
+                this.css = true;
                 //if(this.id === 0){
                 //var rect =  Matter.Bodies.rectangle(400,0,800,90,{ isStatic: true });
                 //this.name = "null";
@@ -81,6 +85,8 @@ define("game/entity/Player", ["game/CssMatcher/ObjectCss"], function(ObjectCss)
 
                 if(this.fire && projectileTimeReloadCounter >= projectileTimeReload) {
 
+                    this.addClass("fire");
+
                     if(invProject == true){
                         Room.prototype.add.call(room,new Projectile(body.center.x - 10,body.center.y - 12,0,-10));
                         invProject = false
@@ -91,8 +97,10 @@ define("game/entity/Player", ["game/CssMatcher/ObjectCss"], function(ObjectCss)
 
                     projectileTimeReloadCounter = 0;
                     releasePressBar = false;
-
-                    createjs.Sound.play("fire");
+                }
+                else
+                {
+                    this.removeClass("fire");
                 }
 
                 projectileTimeReloadCounter++;

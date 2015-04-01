@@ -9,6 +9,7 @@ function Entity(){
 	if(typeof Entity.initialized == "undefined"){
 		Entity.initialized = true;
 	}
+    this.css = false;
 }
 
 /**
@@ -38,10 +39,7 @@ Entity.prototype.setBody = function(body, options){
 
     if(options.css)
     {
-        require(["game/CssMatcher/Stylesheet"], _.bind(function(Stylesheet)
-        {
-            _.extend(body.render, Stylesheet.getRulesForObject(this));
-        }, this));
+        this.css = true;
     }
 
     if(this.priv_body !== undefined){

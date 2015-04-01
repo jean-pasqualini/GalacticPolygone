@@ -15,28 +15,34 @@ define(["game/CssMatcher/ObjectCss"], function(ObjectCss)
         {
 
         },
+        parseCache: function(cacheData)
+        {
+            var selecteurs = {};
+
+            _.each(cacheData, function(item, key)
+            {
+                selecteurs[key] = ObjectCss.factoryFromArray(item);
+            });
+
+            return selecteurs;
+        },
         parseObject : function(objectData)
         {
             var selecteurs =  {};
 
             _.each(objectData, function(properties, selector)
             {
-                selecteurs[selector] = new ObjectCss();
+                selecteurs[selector] = ObjectCss.factoryFromSelector(selector);
 
-                var regexName = /^([A-Za-z]{1,})/;
-
-                var match = null;
-
-                if((match = regexName.exec(selector)) !== null)
-                {
-                    selecteurs[selector].setName(match[0]);
-                }
+                var selecteur = selecteurs[selector];
 
                 _.each(properties, function(value, key)
                 {
                    this.setProperty(key, value);
-                }, selecteurs[selector]);
+                }, selecteur);
             });
+
+            console.log(selecteurs);
 
             return selecteurs;
         },
@@ -44,11 +50,17 @@ define(["game/CssMatcher/ObjectCss"], function(ObjectCss)
         {
 
         },
-        parse : function(represent)
+        parse : function(represent, type)
         {
-            if(typeof represent == "object")
+            if(typeof type == "undefined") type = "object";
+
+            if(type == "object")
             {
                 return this.parseObject(represent);
+            }
+            else
+            {
+                return this.parseCache(represent);
             }
         }
     });

@@ -1,10 +1,16 @@
 CanvasCss = {
     "Player" :
     {
-        "border": "red",
+        "border": "green",
         "background-color": "green",
-        "background-image": "assets/sprite/monster.png",
-        "border-width" : "10"
+        "border-width" : "10",
+        "background-sound" : ""
+    },
+    "Player.fire" : {
+        "background-image": "",
+        "border": "red",
+        "background-color": "red",
+        "background-sound" : "fire"
     },
     "Monster" :
     {

@@ -4,18 +4,21 @@
 	this.vie = 100;
 	this.shoot = false;
 
+    require(["game/CssMatcher/ObjectCss"], _.bind(function(ObjectCss)
+    {
+        this.objectCss = new ObjectCss();
+
+        this.objectCss.setName("Monster");
+
+        this.css = true;
+    }, this));
+
 	if(Monster.initialized === undefined){
 
 		Monster.prototype.init = function(room){
 
 			this.name = "Monster";
 			var posx=60+Math.random()*190,posy=-80;
-
-            var render = {
-                    sprite: {
-                        texture: "assets/sprite/asteroid.png"
-                    }
-            };
 
 			var tri = Matter.Bodies.polygon(posx,posy,3,10+Math.random()*10,{density: 0.01});
 			Matter.Body.rotate(tri,3.14/360*2*30);

@@ -3,7 +3,7 @@
 	 <title>Galactic Polygon (Alpha 0.1)</title>
 	</head>
 
-	<body style="overflow:hidden;">
+	<body style="">
          <canvas id="game" width="256px" height = "256px" style="width: 512px; height: 512px;"> Your Web Navigator do not support Canvas</canvas>
     </body>
     <h3> Controlles: Clavier(Flèches Dirrectionnelle & Barre Espace)</h3>
@@ -51,6 +51,9 @@
 <script src="SkelzEngine/libs/underscore-min.js"></script>
 <script src="game/IA/Event.js"></script>
 <script src="SkelzEngine/SkelzEngine.js"></script>
+
+<!-- Cache -->
+<script src="cache/cssObject/cache.js"></script>
 
 <!-- custom engine factory -->
 <script src="game/EngineFactory.js"></script>
@@ -132,13 +135,15 @@ var enableIa = function()
         "game/IA/Ia",
         "game/Logger/Logger.js",
         "game/Logger/WebLogger",
-        "game/Logger/MultipleLogger"
+        "game/Logger/MultipleLogger",
+        "game/entity/Player"
     ], function(
             EnvironmentFactory,
             Ia,
             Logger,
             WebLogger,
-            MultipleLogger
+            MultipleLogger,
+            Player
     )
     {
         var room = SkelzEngine.priv_room;
@@ -186,7 +191,10 @@ var canvasContext2d = document.getElementById("game").getContext("2d");
 canvasContext2d.imageSmoothingEnabled= false;
 canvasContext2d.mozImageSmoothingEnabled = false;
 
-var optionsUrl = new Array();
+var optionsUrl =
+{
+    debug: 0
+};
 
 var _optionsKeyValue = window.location.hash.replace("#", "").split("&");
 
@@ -197,13 +205,20 @@ _.each(_optionsKeyValue, function(keyvalue)
    optionsUrl[keyvalue[0]] = keyvalue[1];
 });
 
-var start = function(NullController, Stylesheet)
+var start = function(NullController, Stylesheet, CacheStorage)
 {
+    Stylesheet.setCacheStorage(new CacheStorage());
 
-    Stylesheet.addFile("custom");
+    if(optionsUrl.debug == 0)
+    {
+        Stylesheet.addResource(cacheCssObjects, "cache", "custom");
+    }
+    else
+    {
+        Stylesheet.addResource(CanvasCss, "object", "custom");
+    }
 
     SkelzEngine.init(function(){
-
 
         var room = new Room1();
 
@@ -220,7 +235,11 @@ var start = function(NullController, Stylesheet)
     }, (typeof optionsUrl["engine"] == "undefined") ? null : EngineFactory.factory(optionsUrl["engine"]));
 };
 
-require(["game/Controller/NullController", "game/CssMatcher/Stylesheet"], start);
+require([
+    "game/Controller/NullController",
+    "game/CssMatcher/Stylesheet",
+    (typeof localStorage != "undefined") ? "game/CacheManager/LocalStorageCacheManager" : "game/CacheManager/MemoryCacheManager"
+], start);
 
 
 </script>

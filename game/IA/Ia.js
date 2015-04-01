@@ -1,4 +1,4 @@
-define([], function() {
+define(["game/entity/Player"], function(Player) {
 
     'use strict';
 

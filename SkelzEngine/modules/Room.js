@@ -57,6 +57,21 @@ Room.prototype.preRender = function(){
                 //alert(this.priv_entityList.length);
             }else{
                 Entity.prototype.preRender.call(this.priv_entityList[i],this);
+
+                if(this.priv_entityList[i].css && this.priv_entityList[i].body !== null)
+                {
+                    require(["game/CssMatcher/Stylesheet"], _.bind(function(Stylesheet)
+                    {
+                        _.extend(this.priv_body.render, Stylesheet.getRulesForObject(this));
+                        if(typeof this.priv_body.render.sound != "undefined")
+                        {
+                            if(this.priv_body.render.sound != "")
+                            {
+                                createjs.Sound.play(this.priv_body.render.sound);
+                            }
+                        }
+                    }, this.priv_entityList[i]));
+                }
             }
 
         }

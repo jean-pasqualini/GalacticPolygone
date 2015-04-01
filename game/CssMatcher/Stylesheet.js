@@ -4,6 +4,7 @@ define(["game/CssMatcher/ObjectCssInterface", "game/CssMatcher/CssParser"], func
         theme: "Default",
         definitionsCss: {},
         folder: "theme/",
+       __stateCss : {},
         setTheme: function(theme)
         {
 
@@ -16,9 +17,9 @@ define(["game/CssMatcher/ObjectCssInterface", "game/CssMatcher/CssParser"], func
         {
             return new CssParser();
         },
-        addFile: function(file)
+        addResource: function(resource, type, name)
         {
-            StyleSheet.definitionsCss[file] = StyleSheet.getParser().parse(CanvasCss);
+            StyleSheet.definitionsCss[name] = StyleSheet.getParser().parse(resource, type);
         },
         removeFile: function(file)
         {
@@ -34,7 +35,9 @@ define(["game/CssMatcher/ObjectCssInterface", "game/CssMatcher/CssParser"], func
 
             var matched = {};
 
-            var entityRepresent = entity;
+            var entityRepresent = (typeof entity.objectCss != "undefined") ? entity.objectCss : entity;
+
+            var identifier = entityRepresent.getIdentifier();
 
             var validatedRepresent = InterfaceValidity.validatePrototype(Object.getPrototypeOf(entityRepresent), ObjectCssInterface);
 
@@ -43,13 +46,28 @@ define(["game/CssMatcher/ObjectCssInterface", "game/CssMatcher/CssParser"], func
                 InterfaceValidity.throwError(validatedRepresent);
             }
 
+            if(typeof StyleSheet.__stateCss[identifier] != "undefined")
+            {
+                return StyleSheet.__stateCss[identifier];
+            }
+
             _.each(StyleSheet.definitionsCss, function(resource)
             {
-                _.each(resource, function(cssObject)
+                _.each(resource, function(cssObject, selector)
                 {
                     if(cssObject.hasName(entityRepresent.getName()))
                     {
-                        _.extend(matched, cssObject.getPropertys());
+                        var classesObject = cssObject.getClasses();
+                        var classesEntity = entityRepresent.getClasses();
+
+                        if(
+                            _.isEmpty(classesObject)
+                            ||
+                            _.isEmpty(_.difference(classesObject, classesEntity))
+                        )
+                        {
+                            _.extend(matched, cssObject.getPropertys());
+                        }
                     }
                 });
             });
@@ -58,6 +76,9 @@ define(["game/CssMatcher/ObjectCssInterface", "game/CssMatcher/CssParser"], func
             if(typeof matched["background-color"] != "undefined") render.fillStyle = matched["background-color"];
             if(typeof matched["background-image"] != "undefined") render.sprite = { xScale: 1, yScale: 1, texture : matched["background-image"] };
             if(typeof matched["border-width"] != "undefined") render.lineWidth = { texture : matched["border-width"] };
+            if(typeof matched["background-sound"] != "undefined") render.sound = matched["background-sound"];
+
+            StyleSheet.__stateCss[identifier] = render;
 
             return render;
         }
